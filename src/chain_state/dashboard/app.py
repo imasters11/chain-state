@@ -186,7 +186,7 @@ app.layout = html.Div(
 )
 def calculate(n_clicks, v2_pool_contract_address, wallet_address, block_number):
     if n_clicks != None:  # clicked
-        print('the button works!')
+        print("the button works!")
         res = get_underlying_balances_address(
             v2_pool_contract_address, wallet_address, block_number
         )

@@ -6,6 +6,7 @@ from web3 import Web3
 
 from .env_utils import get_env_variable
 
+import pickle
 
 def get_w3_provider(chain) -> Web3:
     if chain == 'ethereum':
@@ -30,7 +31,22 @@ def get_abi(address: str) -> dict:
 
     url = construct_scanner_url(abi_request_params)
     print(url)
-    resp = requests.get(url)
+    try:
+        with open('pickl', 'rb') as pickle_file:
+            past_requests = pickle.load(pickle_file)
+        # print('dict loaded from pickle')
+    except:
+        past_requests = {}
+        # print('dict created')
+    if url in past_requests.keys():
+        resp = past_requests[url]
+        # print('resp read from unpickled dict')
+    else:
+        resp = requests.get(url)
+        past_requests[url] = resp
+        pickle.dump(past_requests, open("pickl",'wb'))
+        # print('resp agidded to pickle')
+
     try:
         return resp.json()['result']
     except Exception as e:
