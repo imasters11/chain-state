@@ -32,7 +32,7 @@ def get_abi(address: str) -> dict:
     return resp.json()['result']
 
 
-def contract_call_at_block(interface_address, implementation_address, fn_name, fn_args, block_no, chain, abi=None):
+def contract_call_at_block(interface_address: str, implementation_address: str, fn_name: str, fn_args: list, block_no: int, chain: str, abi=None):
     w3 = get_w3_provider(chain)
 
     if not abi:
