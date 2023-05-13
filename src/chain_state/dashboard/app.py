@@ -1,5 +1,6 @@
 from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
+from chain_state.uni.uni_v2 import get_underlying_balances_address
 
 app = Dash(__name__)
 
@@ -69,6 +70,7 @@ query_variables = html.Div(
             id="wallet_address",
             placeholder="Wallet address",
             type="text",
+            value="asdf",
             style={"width": "350px"},
         ),
         html.Br(),
@@ -77,6 +79,7 @@ query_variables = html.Div(
             id="block_number",
             placeholder="Blocknumber",
             type="text",
+            value="asdf",
             style={"width": "350px"},
         ),
         html.Br(),
@@ -133,7 +136,7 @@ radio_v3 = html.Div(
     style={"margin-left": "20px"},
 )
 
-result = html.Div([html.H2(children="Result"), html.Div("300 billion million")])
+# result_div = html.Div([html.H2(children="Result"), html.Div("300 billion million")])
 
 app.layout = html.Div(
     [
@@ -166,16 +169,26 @@ app.layout = html.Div(
         html.Br(),
         html.Br(),
         html.Button(children="Submit", id="generate_button"),
-        html.Div(id='result')
+        html.Div(id="result"),
     ]
 )
 
 
-@app.callback(Output("result", "children"), Input("generate_button", "n_clicks"))
-def set_otherscanner(n_clicks):
+@app.callback(
+    Output("result", "children"),
+    [
+        Input("generate_button", "n_clicks"),
+        Input("pool_contract_address", "value"),
+        Input("wallet_address", "value"),
+        Input("block_number", "value"),
+    ],
+)
+def calculate(n_clicks, pool_contract_address, wallet_address, block_number):
     if n_clicks != None:  # clicked
-        # result = function(asdf)
-        return result
+        res = get_underlying_balances_address(
+            pool_contract_address, wallet_address, block_number
+        )
+        return html.Div([html.H2(children="Result"), html.Div(f"{list(res)}")])
 
 
 @app.callback(Output("other_scanner", "children"), Input("checklist_mainnet", "value"))
@@ -194,7 +207,8 @@ def set_dex_fields(value):
                 id="pool_contract_address",
                 placeholder="Pool contract address",
                 type="text",
-                style={"width": "350px", "margin-left": "20px"},
+                value="asdf",
+                style={"width": "350px"},
             ),
         )
     elif value == protocol_list[1]:  # v3
