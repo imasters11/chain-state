@@ -12,5 +12,6 @@ dependencies = [
     "web3~=6.3.0",
     "SQLAlchemy~=2.0.13",
     "dash~=2.9.3",
-    "dash-bootstrap-components~=1.4.1"
+    "dash-bootstrap-components~=1.4.1",
+    "dataclasses-json~=0.5.7"
 ]
