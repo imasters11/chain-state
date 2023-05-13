@@ -32,7 +32,12 @@ etherscan_api = html.Div(
         ),
         html.Br(),
         html.Br(),
-        dcc.Checklist(id='checklist_mainnet', options=[{'label': '  Contract is not on Ethereum mainnet', 'value':'mainnet'}], ),
+        dcc.Checklist(
+            id="checklist_mainnet",
+            options=[
+                {"label": "  Contract is not on Ethereum mainnet", "value": "mainnet"}
+            ],
+        ),
     ],
     style={"margin-left": "20px"},
 )
@@ -128,6 +133,8 @@ radio_v3 = html.Div(
     style={"margin-left": "20px"},
 )
 
+result = html.Div([html.H2(children="Result"), html.Div("300 billion million")])
+
 app.layout = html.Div(
     [
         html.Center(
@@ -155,16 +162,30 @@ app.layout = html.Div(
                 query_variables,
             ]
         ),
+        html.Br(),
+        html.Br(),
+        html.Br(),
+        html.Button(children="Submit", id="generate_button"),
+        html.Div(id='result')
     ]
 )
 
 
+@app.callback(Output("result", "children"), Input("generate_button", "n_clicks"))
+def set_otherscanner(n_clicks):
+    if n_clicks != None:  # clicked
+        # result = function(asdf)
+        return result
+
+
 @app.callback(Output("other_scanner", "children"), Input("checklist_mainnet", "value"))
 def set_otherscanner(value):
-    if value == ['mainnet']:  # other scanner needed
+    if value == ["mainnet"]:  # other scanner needed
         return other_scan_api
     else:
         pass
+
+
 @app.callback(Output("contracts", "children"), Input("dex_id", "value"))
 def set_dex_fields(value):
     if value == protocol_list[0]:  # v2
@@ -199,6 +220,7 @@ def set_radio_fields(value):
                 ),
             ]
         )
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)
