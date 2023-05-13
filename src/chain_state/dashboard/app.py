@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 from dataclasses_json import dataclass_json
 from chain_state.uni.uni_v2 import get_underlying_balances_address
 
+import json
+
 app = Dash(__name__)
 
 chain_list = ["Ethereum", "Polygon", "Arbitrum"]
@@ -168,7 +170,7 @@ app.layout = html.Div(
         html.Br(),
         html.Br(),
         html.Button(children="Submit", id="generate_button"),
-        html.Div(id="result", style={'margin-left': '300px'}),
+        dcc.Markdown(id="result"),
     ]
 )
 
@@ -190,7 +192,7 @@ def calculate(n_clicks, v2_pool_contract_address, wallet_address, block_number):
         )
         print(type)
         print(res.to_dict())
-        return html.Div([html.H2(children="Result"), html.Div(res.to_dict())])
+        return f"```{json.dumps(res.to_dict(), indent=2, default=str)}```"
 
 
 @app.callback(Output("other_scanner", "children"), Input("checklist_mainnet", "value"))
