@@ -1,57 +1,78 @@
-from dash import Dash, html, dcc, callback, Output, Input
+from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 
 app = Dash(__name__)
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
+chain_list = ['Ethereum', 'Polygon', 'Arbitrum']
+protocol_list = ['UniSwap v2', 'UniSwap v3']
 
-num_ccalls = 3
-num_calcs = 2
-
-contract_calls = html.Div(
-    flatten([
-        [
-            # html.Div(children=f"{counter_contract_calls+1}"),
-            dcc.Input(id=f"res_{counter_contract_calls+1}", placeholder="Var name", type="text", style={'width':'60px', "margin-left": "20px"}),
-            dcc.Input(id=f"call_{counter_contract_calls+1}", placeholder="Function name", type="text", style={"margin-left": "10px"}),
-            dcc.Input(id=f"inputs_{counter_contract_calls+1}", placeholder="Inputs, comma seperated", type="text", style={"margin-left": "10px"}),
-            html.Br(),
-            html.Br(),
-        ]
-        for counter_contract_calls in range(num_ccalls)
-    ])
+query_variables = html.Div(
+    [
+        dcc.Dropdown(options=chain_list, id="chain_id", placeholder="Chain", style={'width':'200px', "margin-left": "10px"}),
+        html.Br(),
+        dbc.Input(id="wallet_address", placeholder="Wallet address", type="text", style={'width':'350px', "margin-left": "20px"}),
+        html.Br(),
+        html.Br(),
+        dbc.Input(id="block_number", placeholder="Blocknumber", type="text", style={'width':'350px', "margin-left": "20px"}),
+        html.Br(),
+        html.Br(),
+        html.Div(id='contracts'),
+    ]
 )
 
-calculations = html.Div(
-    flatten([
-        [
-            dbc.Input(id=f"mat_res_{counter_calculations}", placeholder="Math variable name", type="text", style={'width':'60px', "margin-left": "20px"}),
-            dbc.Input(id=f"formula_{counter_calculations}", placeholder="Formula involving variables", type="text", style={'width':'500px', "margin-left": "15px"}),
-            html.Br(),
-            html.Br(),
-        ]
-        for counter_calculations in range(num_calcs)
-    ])
-)
-
+api_ids = html.Div([
+        dbc.Input(id="api_address", placeholder="API address", type="text", style={'width':'350px', "margin-left": "20px"}),
+        html.Br(),
+        html.Br(),
+        dbc.Input(id="api_key", placeholder="API key", type="text", style={'width':'350px', "margin-left": "20px"}),
+])
 
 app.layout = html.Div([
-    html.H1(children='Chain state', style={'textAlign':'center'}),
-    html.H2(children='Contract calls'),
-    contract_calls,
-    html.Br(),
-    html.Br(),
-    html.Br(),
-    html.H2(children='Maths'),
-    calculations
+    html.Center([
+        html.H1(children='Chain state'),
+        dcc.Dropdown(options=protocol_list, id="dex_id", placeholder="Protocol", style = {'width': '200px', 'textAlign':'left'}),
+    ]),
 
-], style={"margin-left": "300px"})
+    html.Div(
+    [
+        html.Div(
+            [
+                html.H2(children='API variables'),
+                api_ids,
+            ]
+        ),
+        html.Div(
+            [
+                html.H2(children='Query variables'),
+                query_variables,
+            ]
+        ),
+    ], style={'display':'inline-block'}
+    )
 
+])
 
-# @app.callback(Output("output", "children"), [Input("input", "value")])
-# def output_text(value):
-#     return value
+@app.callback(
+    Output("contracts", "children"), 
+    Input("dex_id", "value"))
+def set_contract_fields(value):
+    if value == protocol_list[0]:
+        return dbc.Input(id="pool_contract_address", placeholder="Pool contract address", type="text", style={'width':'350px', "margin-left": "20px"}),
+    elif value == protocol_list[1]:
+        fields = [
+            dbc.Input(id="pool_contract_address", placeholder="Pool contract address", type="text", style={'width':'350px', "margin-left": "20px"}),
+            html.Br(),
+            html.Br(),
+            dbc.Input(id="nft_contract_address", placeholder="NFT contract address", type="text", style={'width':'350px', "margin-left": "20px"}),
+            html.Br(),
+            html.Br(),
+            dbc.Input(id="nft_id", placeholder="NFT ID", type="text", style={'width':'350px', "margin-left": "20px"}),
+        ]
+        return fields
+    else:
+        return html.Div('Please select protocol version first.', style={'margin-left':'20px'})
+
+# https://github.com/plotly/dash/issues/475
 
 if __name__ == '__main__':
     app.run_server(debug=True)
