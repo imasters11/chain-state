@@ -184,24 +184,21 @@ def set_dex_fields(value):
         )
 
 
-# @app.callback(Output("radio_v3_children", "children"), Input("radio_v3", "value"))
-# def set_radio_fields(value):
-#     if value == radio_v3_options[0]:
-#         return v3_transcation_fields
-#     elif value == radio_v3_options[1]:
-#         return v3_lp_fields
-#     else:
-#         return html.Div(
-#             [
-#                 html.Br(),
-#                 html.Div(
-#                     "Please select type of input first.", style={"margin-left": "20px"}
-#                 ),
-#             ]
-#         )
-
-
-# https://github.com/plotly/dash/issues/475
+@app.callback(Output("radio_v3_children", "children"), Input("radio_v3", "value"))
+def set_radio_fields(value):
+    if value == radio_v3_options[0]:
+        return v3_transcation_fields
+    elif value == radio_v3_options[1]:
+        return v3_lp_fields
+    else:
+        return html.Div(
+            [
+                html.Br(),
+                html.Div(
+                    "Please select type of input first.", style={"margin-left": "20px"}
+                ),
+            ]
+        )
 
 if __name__ == "__main__":
     app.run_server(debug=True)
