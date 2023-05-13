@@ -1,6 +1,7 @@
 from typing import Optional
 
 from dataclasses import dataclass
+from dataclasses_json import dataclass_json
 from decimal import Decimal
 
 from chain_state.utils.web3_utils import contract_call_at_block
@@ -8,6 +9,7 @@ from chain_state.utils.web3_utils import contract_call_at_block
 E18 = Decimal(10 ** 18)
 
 
+@dataclass_json
 @dataclass(frozen=True)
 class V2PoolToken:
     index: int
@@ -16,6 +18,7 @@ class V2PoolToken:
     decimals: int
 
 
+@dataclass_json
 @dataclass(frozen=True)
 class V2LiquiditySnapshot:
     block: Optional[int]
@@ -117,4 +120,4 @@ def get_underlying_balances_lp_tokens(pool_address: str, wallet_lp_balance: Deci
 
 if __name__ == "__main__":
     liquidity_snapshot = get_underlying_balances_address('0x33d39eA02D1A569ECc77FBFcbBDCD4300fA0b010', '0xE05DE631122d95eF347f6fCA85d1bB149Fcc6Df2')
-    print(liquidity_snapshot)
+    print(liquidity_snapshot.to_dict())
