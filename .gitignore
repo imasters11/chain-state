@@ -164,3 +164,4 @@ cython_debug/
 /.idea/modules.xml
 /.idea/misc.xml
 /.idea/chain-state.iml
+/.idea
