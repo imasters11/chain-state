@@ -11,7 +11,6 @@ radio_v3_options = ["Transaction ID", "Pool and NFT details"]
 protocol_select = dcc.Dropdown(
     options=protocol_list,
     id="dex_id",
-    value=protocol_list[0],
     placeholder="Protocol",
     style={"width": "200px", "textAlign": "left"},
 )
@@ -22,7 +21,6 @@ etherscan_api = html.Div(
             id="etherscan_rpc_endpoint",
             placeholder="Etherscan RPC endpoint",
             type="text",
-            value="https://mainnet.infura.io/v3/810b8efe753746e3b203d85d6aa231f8",
             style={"width": "350px"},
         ),
         html.Br(),
@@ -30,7 +28,6 @@ etherscan_api = html.Div(
         dbc.Input(
             id="etherscan_api_key",
             placeholder="Etherscan API key",
-            value="MGQ8NG4Y9J69S3ZKUGNYKSDS55E16RTSI4",
             type="text",
             style={"width": "350px"},
         ),
@@ -73,7 +70,6 @@ query_variables = html.Div(
             id="wallet_address",
             placeholder="Wallet address",
             type="text",
-            value="0xE05DE631122d95eF347f6fCA85d1bB149Fcc6Df2",
             style={"width": "350px"},
         ),
         html.Br(),
@@ -82,8 +78,6 @@ query_variables = html.Div(
             id="block_number",
             placeholder="Blocknumber",
             type="text",
-            # value="1000000",
-            value=None,
             style={"width": "350px"},
         ),
         html.Br(),
@@ -211,7 +205,6 @@ def set_dex_fields(value):
                 id="v2_pool_contract_address",
                 placeholder="Pool contract address",
                 type="text",
-                value="0x33d39eA02D1A569ECc77FBFcbBDCD4300fA0b010",
                 style={"width": "350px"},
             ),
         )
