@@ -30,7 +30,6 @@ def get_abi(address: str) -> dict:
     }
 
     url = construct_scanner_url(abi_request_params)
-    print(url)
     try:
         with open('pickl', 'rb') as pickle_file:
             past_requests = pickle.load(pickle_file)
@@ -42,10 +41,11 @@ def get_abi(address: str) -> dict:
         resp = past_requests[url]
         # print('resp read from unpickled dict')
     else:
+        print(url)
         resp = requests.get(url)
         past_requests[url] = resp
         pickle.dump(past_requests, open("pickl",'wb'))
-        # print('resp agidded to pickle')
+        # print('resp added to pickle')
 
     try:
         return resp.json()['result']
