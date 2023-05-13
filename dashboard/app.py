@@ -30,17 +30,22 @@ etherscan_api = html.Div(
             type="text",
             style={"width": "350px"},
         ),
+        html.Br(),
+        html.Br(),
+        dcc.Checklist(id='checklist_mainnet', options=[{'label': '  Contract is not on Ethereum mainnet', 'value':'mainnet'}], ),
     ],
     style={"margin-left": "20px"},
 )
 
 other_scan_api = html.Div(
     [
+        html.H3(children="Other scanner"),
+        html.Br(),
         dbc.Input(
             id="otherscan_rpc_endpoint",
             placeholder="RPC endpoint for chain of interest",
             type="text",
-            style={"width": "350px"},
+            style={"width": "350px", "margin-left": "20px"},
         ),
         html.Br(),
         html.Br(),
@@ -48,10 +53,9 @@ other_scan_api = html.Div(
             id="otherscan_api_key",
             placeholder="API key for RPC of interest",
             type="text",
-            style={"width": "350px"},
+            style={"width": "350px", "margin-left": "20px"},
         ),
     ],
-    style={"margin-left": "20px"},
 )
 
 query_variables = html.Div(
@@ -140,13 +144,6 @@ app.layout = html.Div(
                         html.H3(children="Etherscan"),
                         etherscan_api,
                         html.Div(id="other_scanner"),
-                        html.H3(children="Other scanner"),
-                        html.Div(
-                            children="Only fill this in if the contract is not on Ethereum",
-                            style={"margin-left": "20px"},
-                        ),
-                        html.Br(),
-                        other_scan_api,
                     ],
                     style={"margin-left": "20px"},
                 ),
@@ -162,6 +159,12 @@ app.layout = html.Div(
 )
 
 
+@app.callback(Output("other_scanner", "children"), Input("checklist_mainnet", "value"))
+def set_otherscanner(value):
+    if value == ['mainnet']:  # other scanner needed
+        return other_scan_api
+    else:
+        pass
 @app.callback(Output("contracts", "children"), Input("dex_id", "value"))
 def set_dex_fields(value):
     if value == protocol_list[0]:  # v2
@@ -181,21 +184,21 @@ def set_dex_fields(value):
         )
 
 
-@app.callback(Output("radio_v3_children", "children"), Input("radio_v3", "value"))
-def set_radio_fields(value):
-    if value == radio_v3_options[0]:
-        return v3_transcation_fields
-    elif value == radio_v3_options[1]:
-        return v3_lp_fields
-    else:
-        return html.Div(
-            [
-                html.Br(),
-                html.Div(
-                    "Please select type of input first.", style={"margin-left": "20px"}
-                ),
-            ]
-        )
+# @app.callback(Output("radio_v3_children", "children"), Input("radio_v3", "value"))
+# def set_radio_fields(value):
+#     if value == radio_v3_options[0]:
+#         return v3_transcation_fields
+#     elif value == radio_v3_options[1]:
+#         return v3_lp_fields
+#     else:
+#         return html.Div(
+#             [
+#                 html.Br(),
+#                 html.Div(
+#                     "Please select type of input first.", style={"margin-left": "20px"}
+#                 ),
+#             ]
+#         )
 
 
 # https://github.com/plotly/dash/issues/475
