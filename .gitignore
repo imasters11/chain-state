@@ -12,6 +12,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+dashboard/tmp.py
 eggs/
 .eggs/
 lib/
