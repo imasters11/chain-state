@@ -62,7 +62,7 @@ def get_underlying_balances_address(pool_address: str, wallet_address: str, bloc
 
     wallet_lp_balance_result = contract_call_at_block(interface_address=pool_address,
                                                       implementation_address=pool_address,
-                                                      fn_name='balance_of',
+                                                      fn_name='balanceOf',
                                                       fn_args=[wallet_address],
                                                       block_no=block_no,
                                                       chain='ethereum')
@@ -94,3 +94,8 @@ def get_underlying_balances_address(pool_address: str, wallet_address: str, bloc
 
 def get_underlying_balances_lp_tokens(pool_address: str, num_lp_tokens: Decimal, block_no: int) -> V2LiquiditySnapshot:
     pass
+
+
+if __name__ == "__main__":
+    liquidity_snapshot = get_underlying_balances_address('0x33d39eA02D1A569ECc77FBFcbBDCD4300fA0b010', '0xE05DE631122d95eF347f6fCA85d1bB149Fcc6Df2', 17251884)
+    print(liquidity_snapshot)
