@@ -1,5 +1,6 @@
 from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
+from dataclasses_json import dataclass_json
 from chain_state.uni.uni_v2 import get_underlying_balances_address
 
 app = Dash(__name__)
@@ -12,6 +13,7 @@ protocol_select = dcc.Dropdown(
     options=protocol_list,
     id="dex_id",
     placeholder="Protocol",
+    value=protocol_list[0],
     style={"width": "200px", "textAlign": "left"},
 )
 
@@ -70,6 +72,7 @@ query_variables = html.Div(
             id="wallet_address",
             placeholder="Wallet address",
             type="text",
+            value="0xE05DE631122d95eF347f6fCA85d1bB149Fcc6Df2",
             style={"width": "350px"},
         ),
         html.Br(),
@@ -165,7 +168,7 @@ app.layout = html.Div(
         html.Br(),
         html.Br(),
         html.Button(children="Submit", id="generate_button"),
-        html.Div(id="result"),
+        html.Div(id="result", style={'margin-left': '300px'}),
     ]
 )
 
@@ -181,9 +184,12 @@ app.layout = html.Div(
 )
 def calculate(n_clicks, v2_pool_contract_address, wallet_address, block_number):
     if n_clicks != None:  # clicked
+        print('the button works!')
         res = get_underlying_balances_address(
             v2_pool_contract_address, wallet_address, block_number
         )
+        print(type)
+        print(res.to_dict())
         return html.Div([html.H2(children="Result"), html.Div(res.to_dict())])
 
 
@@ -203,6 +209,7 @@ def set_dex_fields(value):
                 id="v2_pool_contract_address",
                 placeholder="Pool contract address",
                 type="text",
+                value="0x33d39eA02D1A569ECc77FBFcbBDCD4300fA0b010",
                 style={"width": "350px"},
             ),
         )
