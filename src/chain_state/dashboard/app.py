@@ -134,8 +134,6 @@ radio_v3 = html.Div(
     style={"margin-left": "20px"},
 )
 
-# result_div = html.Div([html.H2(children="Result"), html.Div("300 billion million")])
-
 app.layout = html.Div(
     [
         html.Center(
@@ -186,7 +184,7 @@ def calculate(n_clicks, v2_pool_contract_address, wallet_address, block_number):
         res = get_underlying_balances_address(
             v2_pool_contract_address, wallet_address, block_number
         )
-        return html.Div([html.H2(children="Result"), html.Div(res.__dict__)])
+        return html.Div([html.H2(children="Result"), html.Div(res.to_dict())])
 
 
 @app.callback(Output("other_scanner", "children"), Input("checklist_mainnet", "value"))
