@@ -93,7 +93,7 @@ v3_lp_fields = html.Div(
     [
         html.Br(),
         dbc.Input(
-            id="pool_contract_address",
+            id="v3_pool_contract_address",
             placeholder="Pool contract address",
             type="text",
             style={"width": "350px"},
@@ -178,15 +178,15 @@ app.layout = html.Div(
     Output("result", "children"),
     [
         Input("generate_button", "n_clicks"),
-        Input("pool_contract_address", "value"),
+        Input("v2_pool_contract_address", "value"),
         Input("wallet_address", "value"),
         Input("block_number", "value"),
     ],
 )
-def calculate(n_clicks, pool_contract_address, wallet_address, block_number):
+def calculate(n_clicks, v2_pool_contract_address, wallet_address, block_number):
     if n_clicks != None:  # clicked
         res = get_underlying_balances_address(
-            pool_contract_address, wallet_address, block_number
+            v2_pool_contract_address, wallet_address, block_number
         )
         return html.Div([html.H2(children="Result"), html.Div(f"{list(res)}")])
 
@@ -204,7 +204,7 @@ def set_dex_fields(value):
     if value == protocol_list[0]:  # v2
         return (
             dbc.Input(
-                id="pool_contract_address",
+                id="v2_pool_contract_address",
                 placeholder="Pool contract address",
                 type="text",
                 value="asdf",
