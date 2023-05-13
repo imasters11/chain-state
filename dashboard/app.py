@@ -30,30 +30,15 @@ etherscan_api = html.Div(
             type="text",
             style={"width": "350px"},
         ),
-    ]
-)
-
-api_ids = html.Div(
-    [
-        dcc.Dropdown(
-            options=chain_list,
-            value=chain_list[0],
-            id="chain_dropdown",
-            clearable=False,
-            placeholder="Chain",
-            style={"width": "200px"},
-        ),
-        html.Br(),
-        html.Div(id="otherscan_div"),
     ],
-    # style={"margin-left": "20px"},
+    style={"margin-left": "20px"},
 )
 
-otherscan_api = html.Div(
+other_scan_api = html.Div(
     [
         dbc.Input(
             id="otherscan_rpc_endpoint",
-            placeholder="Otherscan RPC endpoint",
+            placeholder="RPC endpoint for chain of interest",
             type="text",
             style={"width": "350px"},
         ),
@@ -61,11 +46,12 @@ otherscan_api = html.Div(
         html.Br(),
         dbc.Input(
             id="otherscan_api_key",
-            placeholder="Otherscan API key",
+            placeholder="API key for RPC of interest",
             type="text",
             style={"width": "350px"},
         ),
-    ]
+    ],
+    style={"margin-left": "20px"},
 )
 
 query_variables = html.Div(
@@ -74,7 +60,7 @@ query_variables = html.Div(
             id="wallet_address",
             placeholder="Wallet address",
             type="text",
-            style={"width": "350px", "margin-left": "20px"},
+            style={"width": "350px"},
         ),
         html.Br(),
         html.Br(),
@@ -82,12 +68,13 @@ query_variables = html.Div(
             id="block_number",
             placeholder="Blocknumber",
             type="text",
-            style={"width": "350px", "margin-left": "20px"},
+            style={"width": "350px"},
         ),
         html.Br(),
         html.Br(),
         html.Div(id="contracts"),
-    ]
+    ],
+    style={"margin-left": "20px"},
 )
 
 v3_lp_fields = html.Div(
@@ -123,7 +110,7 @@ v3_transcation_fields = html.Div(
             id="transaction_hash",
             placeholder="Transaction ID",
             type="text",
-            style={"width": "350px", "margin-left": "20px"},
+            style={"width": "350px"},
         ),
     ],
     style={"margin-left": "20px"},
@@ -152,8 +139,14 @@ app.layout = html.Div(
                     [
                         html.H3(children="Etherscan"),
                         etherscan_api,
-                        html.H3(children="Chain"),
-                        api_ids,
+                        html.Div(id="other_scanner"),
+                        html.H3(children="Other scanner"),
+                        html.Div(
+                            children="Only fill this in if the contract is not on Ethereum",
+                            style={"margin-left": "20px"},
+                        ),
+                        html.Br(),
+                        other_scan_api,
                     ],
                     style={"margin-left": "20px"},
                 ),
@@ -167,14 +160,6 @@ app.layout = html.Div(
         ),
     ]
 )
-
-
-@app.callback(Output("otherscan_div", "children"), Input("chain_dropdown", "value"))
-def set_otherscan_fields(value):
-    if value == chain_list[0]:  # Etherscan
-        pass
-    else:
-        return otherscan_api
 
 
 @app.callback(Output("contracts", "children"), Input("dex_id", "value"))
